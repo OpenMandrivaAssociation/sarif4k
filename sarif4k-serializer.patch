@@ -1,0 +1,31 @@
+diff --git a/src/commonMain/kotlin/io/github/detekt/sarif4k/SarifDataBindings.kt b/src/commonMain/kotlin/io/github/detekt/sarif4k/SarifDataBindings.kt
+index a4872e8..787afe0 100644
+--- a/src/commonMain/kotlin/io/github/detekt/sarif4k/SarifDataBindings.kt
++++ b/src/commonMain/kotlin/io/github/detekt/sarif4k/SarifDataBindings.kt
+@@ -9,6 +9,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
+ import kotlinx.serialization.encoding.Decoder
+ import kotlinx.serialization.encoding.Encoder
+ import kotlinx.serialization.json.JsonObject
++import kotlinx.serialization.serializer
+ import kotlin.jvm.JvmInline
+ 
+ /*
+@@ -368,15 +369,15 @@ value class PropertyBag(
+         }
+ 
+     companion object : KSerializer<PropertyBag> {
+-        override val descriptor: SerialDescriptor = JsonObject.serializer().descriptor
++        override val descriptor: SerialDescriptor = serializer<JsonObject>().descriptor
+ 
+         override fun deserialize(decoder: Decoder): PropertyBag {
+-            val jsonObject = decoder.decodeSerializableValue(JsonObject.serializer())
++            val jsonObject = decoder.decodeSerializableValue(serializer<JsonObject>())
+             return PropertyBag(jsonObject.toNativeObject())
+         }
+ 
+         override fun serialize(encoder: Encoder, value: PropertyBag) {
+-            encoder.encodeSerializableValue(JsonObject.serializer(), value.toJsonElement())
++            encoder.encodeSerializableValue(serializer<JsonObject>(), value.toJsonElement())
+         }
+     }
+ }
