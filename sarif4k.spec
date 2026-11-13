@@ -16,7 +16,7 @@ BuildRequires:	java-21-openjdk-devel
 BuildRequires:	kotlin = 2.0.21
 BuildRequires:	sysjar
 BuildRequires:	javapackages-filesystem
-BuildRequires:	mvn(org.jetbrains.kotlin:kotlin-stdlib)
+BuildRequires:	kotlin-libs = 2.0.21
 BuildRequires:	mvn(org.jetbrains.kotlinx:kotlinx-serialization-core) = 1.11.0
 BuildRequires:	mvn(org.jetbrains.kotlinx:kotlinx-serialization-json) = 1.11.0
 
@@ -135,15 +135,15 @@ import io.github.detekt.sarif4k.SarifSerializer
 import io.github.detekt.sarif4k.merge
 
 fun main() {
-    val parsed = SarifSerializer.fromJson(
-        """{"version":"2.1.0","runs":[{"tool":{"driver":{"name":"detekt"}}}]}"""
-    )
-    val merged = parsed.merge(parsed)
-    val name = parsed.runs.single().tool.driver.name
-    if (name != "detekt" || parsed.version.value != "2.1.0" || merged.runs.size != 1) {
-        error("sarif check failed")
-    }
-    println("sarif4k_ok " + name + " " + parsed.version.value)
+val parsed = SarifSerializer.fromJson(
+"""{"version":"2.1.0","runs":[{"tool":{"driver":{"name":"detekt"}}}]}"""
+)
+val merged = parsed.merge(parsed)
+val name = parsed.runs.single().tool.driver.name
+if (name != "detekt" || parsed.version.value != "2.1.0" || merged.runs.size != 1) {
+error("sarif check failed")
+}
+println("sarif4k_ok " + name + " " + parsed.version.value)
 }
 EOF
 kotlinc -J-Xmx1g -jvm-target 1.8 -language-version 2.0 -no-stdlib \
